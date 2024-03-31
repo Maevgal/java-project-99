@@ -6,6 +6,6 @@ COPY /app .
 
 RUN pwd
 
-RUN ./gradlew installDist
+RUN ./gradlew --no-daemon build
 
 CMD ./build/install/app/bin/app
