@@ -16,14 +16,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AppApplicationTests {
     @Autowired
     private MockMvc mockMvc;
+
     @Test
     void contextLoads() {
     }
+
     @Test
     public void testWelcomeControllerIndex() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/welcome"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().string(containsString("Welcome to Spring")));
     }
-
 }

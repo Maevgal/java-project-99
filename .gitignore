@@ -41,3 +41,10 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Ignore Gradle project-specific cache directory
+.gradle
+.gitattributes
+
+# Ignore Gradle build output directory
+build
