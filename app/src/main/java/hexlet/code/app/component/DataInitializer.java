@@ -2,6 +2,7 @@ package hexlet.code.app.component;
 
 import hexlet.code.app.dto.UserCeateDTO;
 import hexlet.code.app.mapper.UserMapper;
+import hexlet.code.app.model.User;
 import hexlet.code.app.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import net.datafaker.Faker;
@@ -19,6 +20,10 @@ public class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        User defaultUser = userRepository.findByEmail("hexlet@example.com").orElse(null);
+        if (defaultUser != null) {
+            return;
+        }
         var userData = new UserCeateDTO();
         userData.setEmail("hexlet@example.com");
         userData.setPassword("qwerty");

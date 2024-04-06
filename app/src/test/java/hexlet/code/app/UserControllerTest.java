@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest(
         properties = {
                 "spring.jpa.defer-datasource-initialization=false",
@@ -104,7 +103,6 @@ public class UserControllerTest {
         assertThat(user).isNotNull();
         assertThat(user.getFirstName()).isEqualTo(testUserCreateDTO.getFirstName());
         assertThat(user.getLastName()).isEqualTo(testUserCreateDTO.getLastName());
-
     }
 
     @Test
@@ -140,7 +138,7 @@ public class UserControllerTest {
         assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
         assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
         assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
-        //assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
     @Test
@@ -166,7 +164,7 @@ public class UserControllerTest {
         assertThat(user.getEmail()).isEqualTo(emailOriginal);
         assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
         assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
-        //assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
     @Test
@@ -192,7 +190,7 @@ public class UserControllerTest {
         assertThat(user.getFirstName()).isEqualTo(firstNameOriginal);
         assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
         assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
-        //assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
     @Test
@@ -218,7 +216,7 @@ public class UserControllerTest {
         assertThat(user.getLastName()).isEqualTo(lastNameOriginal);
         assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
         assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
-        //assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
     //не работает
