@@ -1,8 +1,8 @@
 package hexlet.code.app.utils;
+
 import hexlet.code.app.model.User;
 import hexlet.code.app.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +20,7 @@ public class UserUtils {
         var email = authentication.getName();
         return userRepository.findByEmail(email).get();
     }
+
     public boolean isSelf(long userId) {
         var puserSafe = userRepository.findById(userId).get().getEmail();
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -27,7 +28,7 @@ public class UserUtils {
     }
 
     public User getTestUser() {
-        return  userRepository.findByEmail("hexlet@example.com")
+        return userRepository.findByEmail("hexlet@example.com")
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
