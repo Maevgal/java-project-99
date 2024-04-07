@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 @AllArgsConstructor
 @Data
 public class UserController {
@@ -34,7 +34,7 @@ public class UserController {
 
     private UserMapper userMapper;
 
-    @GetMapping("")
+    @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<UserDTO> index() {
         List<User> users = repository.findAll();
@@ -44,7 +44,7 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("")
+    @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO create(@Valid @RequestBody UserCeateDTO userData) {
         User user = userMapper.map(userData);
@@ -53,7 +53,7 @@ public class UserController {
         return userDTO;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO show(@PathVariable Long id) {
         User user = repository.findById(id)
@@ -62,7 +62,7 @@ public class UserController {
         return userDTO;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO update(@RequestBody @Valid UserUpdateDTO userData, @PathVariable Long id) {
         User user = repository.findById(id)
@@ -73,7 +73,7 @@ public class UserController {
         return userDTO;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("@userUtils.isSelf(#id)")
     public void delete(@PathVariable Long id) {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/api")
 @AllArgsConstructor
 public class AuthenticationController {
 
@@ -19,7 +19,7 @@ public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("")
+    @PostMapping("/login")
     public String create(@RequestBody AuthRequest authRequest) {
         var authentication = new UsernamePasswordAuthenticationToken(
                 authRequest.getUsername(), authRequest.getPassword());
