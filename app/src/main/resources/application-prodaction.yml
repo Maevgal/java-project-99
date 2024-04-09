@@ -13,4 +13,5 @@ spring:
       maximum-pool-size: 10
       pool-name: ${spring.application.name}-pool
     jpa:
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: validate
