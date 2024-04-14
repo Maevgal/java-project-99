@@ -2,6 +2,7 @@ package hexlet.code.app.util;
 
 import hexlet.code.app.dto.UserCeateDTO;
 import hexlet.code.app.dto.UserUpdateDTO;
+import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.model.User;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class ModelGenerator {
     private Model<User> userModel;
     private Model<UserCeateDTO> userCreateDTOModel;
     private Model<UserUpdateDTO> userUpdateDTOModel;
+    private Model<TaskStatus> taskStatusModel;
     @Autowired
     private Faker faker;
 
@@ -46,6 +48,12 @@ public class ModelGenerator {
                         .of(faker.internet().emailAddress()))
                 .supply(Select.field(UserUpdateDTO::getPassword), () -> JsonNullable
                         .of(faker.internet().password(3, 9)))
+                .toModel();
+
+        taskStatusModel = Instancio.of(TaskStatus.class)
+                .ignore(Select.field(TaskStatus::getId))
+                .supply(Select.field(TaskStatus::getName), () -> faker.name().firstName())
+                .supply(Select.field(TaskStatus::getSlug), () -> faker.name().title())
                 .toModel();
     }
 
