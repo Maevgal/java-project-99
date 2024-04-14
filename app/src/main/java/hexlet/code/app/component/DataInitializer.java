@@ -21,8 +21,13 @@ public class DataInitializer implements ApplicationRunner {
     private UserMapper userMapper;
     private final TaskStatusMapper taskStatusMapper;
     private final TaskStatusRepository taskStatusRepository;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        taskStatusRepository.deleteAll();
+        taskStatusRepository.flush();
+        userRepository.deleteAll();
+        userRepository.flush();
         User defaultUser = userRepository.findByEmail("hexlet@example.com").orElse(null);
         if (defaultUser != null) {
             return;
@@ -33,30 +38,30 @@ public class DataInitializer implements ApplicationRunner {
         var user = userMapper.map(userData);
         userRepository.save(user);
 
-        var taskStatusCreateDTO = new TaskStatusCreateDTO();
-        taskStatusCreateDTO.setName("Draft");
-        taskStatusCreateDTO.setSlug("draft");
-        var taskStatus1 = taskStatusMapper.map(taskStatusCreateDTO);
+        var taskStatusData = new TaskStatusCreateDTO();
+        taskStatusData.setName("Draft");
+        taskStatusData.setSlug("draft");
+        var taskStatus1 = taskStatusMapper.map(taskStatusData);
         taskStatusRepository.save(taskStatus1);
 
-        taskStatusCreateDTO.setName("ToReview");
-        taskStatusCreateDTO.setSlug("to_review");
-        var taskStatus2 = taskStatusMapper.map(taskStatusCreateDTO);
+        taskStatusData.setName("ToReview");
+        taskStatusData.setSlug("to_review");
+        var taskStatus2 = taskStatusMapper.map(taskStatusData);
         taskStatusRepository.save(taskStatus2);
 
-        taskStatusCreateDTO.setName("ToBeFixed");
-        taskStatusCreateDTO.setSlug("to_be_fixed");
-        var taskStatus3 = taskStatusMapper.map(taskStatusCreateDTO);
+        taskStatusData.setName("ToBeFixed");
+        taskStatusData.setSlug("to_be_fixed");
+        var taskStatus3 = taskStatusMapper.map(taskStatusData);
         taskStatusRepository.save(taskStatus3);
 
-        taskStatusCreateDTO.setName("ToPublish");
-        taskStatusCreateDTO.setSlug("to_publish");
-        var taskStatus4 = taskStatusMapper.map(taskStatusCreateDTO);
+        taskStatusData.setName("ToPublish");
+        taskStatusData.setSlug("to_publish");
+        var taskStatus4 = taskStatusMapper.map(taskStatusData);
         taskStatusRepository.save(taskStatus4);
 
-        taskStatusCreateDTO.setName("Published");
-        taskStatusCreateDTO.setSlug("published");
-        var taskStatus5 = taskStatusMapper.map(taskStatusCreateDTO);
+        taskStatusData.setName("Published");
+        taskStatusData.setSlug("published");
+        var taskStatus5 = taskStatusMapper.map(taskStatusData);
         taskStatusRepository.save(taskStatus5);
     }
 }
