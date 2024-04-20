@@ -2,13 +2,16 @@ package hexlet.code.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.app.mapper.TaskMapper;
+import hexlet.code.app.model.Label;
 import hexlet.code.app.model.Task;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.model.User;
+import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.util.ModelGenerator;
+import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -46,26 +54,57 @@ public class TaskControllerTest {
     @Autowired
     private TaskStatusRepository taskStatusRepository;
     @Autowired
+    private LabelRepository labelRepository;
+    @Autowired
     private ModelGenerator modelGenerator;
     @Autowired
     private TaskMapper taskMapper;
 
     private Task testTask;
     private User testUser;
-    private TaskStatus testTaskStatus;
+    private Faker faker = new Faker();
 
     @BeforeEach
     public void setUp() {
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
         userRepository.save(testUser);
 
-        testTaskStatus = Instancio.of(modelGenerator.getTaskStatusModel()).create();
+        TaskStatus testTaskStatus = Instancio.of(modelGenerator.getTaskStatusModel()).create();
         taskStatusRepository.save(testTaskStatus);
+
+        Label testLabel = Instancio.of(modelGenerator.getLabelModel()).create();
+        labelRepository.save(testLabel);
+        Set<Label> testLabels = new HashSet<>();
+        testLabels.add(testLabel);
 
         testTask = Instancio.of(modelGenerator.getTaskModel()).create();
         testTask.setAssignee(testUser);
         testTask.setTaskStatus(testTaskStatus);
+        testTask.setLabels(testLabels);
         taskRepository.save(testTask);
+
+        List<Label> listLabels = labelRepository.findAll();
+
+        List<TaskStatus> taskStatuses = taskStatusRepository.findAll();
+
+        IntStream.range(1, 20).forEach(i -> {
+            var randomStatusIndex = faker.number().numberBetween(1, taskStatuses.size());
+
+            Set<Label> labels = new HashSet<>();
+            var randomLabelIndex1 = faker.number().numberBetween(1, listLabels.size());
+            var randomLabelIndex2 = faker.number().numberBetween(1, listLabels.size());
+            labels.add(listLabels.get(randomLabelIndex1));
+            labels.add(listLabels.get(randomLabelIndex2));
+
+            var task = new Task();
+            task.setName(faker.book().title());
+            var description = faker.text().text();
+            task.setDescription(description);
+            task.setTaskStatus(taskStatuses.get(randomStatusIndex));
+            task.setLabels(labels);
+            task.setAssignee(testUser);
+            taskRepository.save(task);
+        });
     }
 
     @Test
@@ -79,6 +118,64 @@ public class TaskControllerTest {
         var body = result.getResponse().getContentAsString();
         assertThatJson(body).isArray();
     }
+
+    @Test
+    public void testIndexWithTitleCont() throws Exception {
+        var task = taskRepository.findById(1L)
+                .orElseThrow(() -> new AssertionError("Task not found"));
+        task.setName("TestTitle");
+        taskRepository.save(task);
+
+        var result = mockMvc.perform(get("/api/task?titleCont=TestTitle").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("title").asString().containsIgnoringCase("TestTitle"))
+        );
+    }
+
+    @Test
+    public void testIndexWithStatus() throws Exception {
+        var result = mockMvc.perform(get("/api/task?Status=draft").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("status").asString().containsIgnoringCase("draft"))
+        );
+    }
+
+    @Test
+    public void testIndexWithLabelId() throws Exception {
+        var result = mockMvc.perform(get("/api/task?LabelId=1").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("taskLabelIds").isArray().contains(1))
+        );
+    }
+
+    @Test
+    public void testIndexWithAssigneeId() throws Exception {
+        var result = mockMvc.perform(get("/api/task?AssigneeId=2").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("assignee_id").isEqualTo(2))
+        );
+    }
+
 
     @Test
     public void testCreate() throws Exception {

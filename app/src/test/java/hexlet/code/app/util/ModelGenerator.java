@@ -2,6 +2,7 @@ package hexlet.code.app.util;
 
 import hexlet.code.app.dto.UserCeateDTO;
 import hexlet.code.app.dto.UserUpdateDTO;
+import hexlet.code.app.model.Label;
 import hexlet.code.app.model.Task;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.model.User;
@@ -23,6 +24,7 @@ public class ModelGenerator {
     private Model<UserUpdateDTO> userUpdateDTOModel;
     private Model<TaskStatus> taskStatusModel;
     private Model<Task> taskModel;
+    private Model<Label> labelModel;
     @Autowired
     private Faker faker;
 
@@ -63,6 +65,11 @@ public class ModelGenerator {
                 .supply(Select.field(Task::getName), () -> faker.name().firstName())
                 .supply(Select.field(Task::getIndex), () -> faker.number().positive())
                 .supply(Select.field(Task::getDescription), () -> faker.text().text())
+                .toModel();
+
+        labelModel = Instancio.of(Label.class)
+                .ignore(Select.field(Label::getId))
+                .supply(Select.field(Label::getName), () -> faker.name().title())
                 .toModel();
     }
 
