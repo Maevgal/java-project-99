@@ -121,10 +121,8 @@ public class TaskControllerTest {
 
     @Test
     public void testIndexWithTitleCont() throws Exception {
-        var task = taskRepository.findById(1L)
-                .orElseThrow(() -> new AssertionError("Task not found"));
-        task.setName("TestTitle");
-        taskRepository.save(task);
+        testTask.setName("TestTitle");
+        taskRepository.save(testTask);
 
         var result = mockMvc.perform(get("/api/task?titleCont=TestTitle").with(user(testUser)))
                 .andExpect(status().isOk())
@@ -175,7 +173,6 @@ public class TaskControllerTest {
                         .and(v -> v.node("assignee_id").isEqualTo(2))
         );
     }
-
 
     @Test
     public void testCreate() throws Exception {
