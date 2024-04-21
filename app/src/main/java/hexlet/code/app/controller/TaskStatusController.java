@@ -10,7 +10,9 @@ import hexlet.code.app.repository.TaskStatusRepository;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,11 +35,15 @@ public class TaskStatusController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public List<TaskStatusDTO> index() {
+    public ResponseEntity<List<TaskStatusDTO>> index() {
         List<TaskStatus> taskStatus = repository.findAll();
-        return taskStatus.stream()
+        List<TaskStatusDTO> result = taskStatus.stream()
                 .map(mapper::map)
                 .toList();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(result.size()));
+        ResponseEntity<List<TaskStatusDTO>> response = new ResponseEntity<>(result, headers, HttpStatus.OK.value());
+        return response;
     }
 
     @PostMapping("")

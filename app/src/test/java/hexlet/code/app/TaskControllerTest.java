@@ -111,7 +111,7 @@ public class TaskControllerTest {
     public void testIndex() throws Exception {
         taskRepository.save(testTask);
 
-        var result = mockMvc.perform(get("/api/task").with(user(testUser)))
+        var result = mockMvc.perform(get("/api/tasks").with(user(testUser)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -124,7 +124,7 @@ public class TaskControllerTest {
         testTask.setName("TestTitle");
         taskRepository.save(testTask);
 
-        var result = mockMvc.perform(get("/api/task?titleCont=TestTitle").with(user(testUser)))
+        var result = mockMvc.perform(get("/api/tasks?titleCont=TestTitle").with(user(testUser)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -137,7 +137,7 @@ public class TaskControllerTest {
 
     @Test
     public void testIndexWithStatus() throws Exception {
-        var result = mockMvc.perform(get("/api/task?Status=draft").with(user(testUser)))
+        var result = mockMvc.perform(get("/api/tasks?Status=draft").with(user(testUser)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -150,7 +150,7 @@ public class TaskControllerTest {
 
     @Test
     public void testIndexWithLabelId() throws Exception {
-        var result = mockMvc.perform(get("/api/task?LabelId=1").with(user(testUser)))
+        var result = mockMvc.perform(get("/api/tasks?LabelId=1").with(user(testUser)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -163,7 +163,7 @@ public class TaskControllerTest {
 
     @Test
     public void testIndexWithAssigneeId() throws Exception {
-        var result = mockMvc.perform(get("/api/task?AssigneeId=2").with(user(testUser)))
+        var result = mockMvc.perform(get("/api/tasks?AssigneeId=2").with(user(testUser)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -179,7 +179,7 @@ public class TaskControllerTest {
         testTask.setName("TestPerson");
         var dto = taskMapper.map(testTask);
 
-        var request = post("/api/task").with(user(testUser))
+        var request = post("/api/tasks").with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -195,7 +195,7 @@ public class TaskControllerTest {
 
         var dto = taskMapper.map(testTask);
 
-        var request = put("/api/task/{id}", testTask.getId()).with(user(testUser))
+        var request = put("/api/tasks/{id}", testTask.getId()).with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -213,7 +213,7 @@ public class TaskControllerTest {
     @Test
     public void testShow() throws Exception {
         taskRepository.save(testTask);
-        var request = get("/api/task/{id}", testTask.getId()).with(user(testUser));
+        var request = get("/api/tasks/{id}", testTask.getId()).with(user(testUser));
         var result = mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andReturn();
@@ -228,7 +228,7 @@ public class TaskControllerTest {
     @Test
     public void testDestroy() throws Exception {
         taskRepository.save(testTask);
-        var request = delete("/api/task/{id}", testTask.getId()).with(user(testUser));
+        var request = delete("/api/tasks/{id}", testTask.getId()).with(user(testUser));
         mockMvc.perform(request)
                 .andExpect(status().isNoContent());
         assertThat(taskRepository.existsById(testTask.getId())).isEqualTo(false);

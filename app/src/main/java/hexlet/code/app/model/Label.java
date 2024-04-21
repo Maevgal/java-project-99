@@ -9,11 +9,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -30,8 +30,8 @@ public class Label {
     @Column(unique = true)
     @NotBlank
     private String name;
-    @CreatedDate
-    private LocalDate createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

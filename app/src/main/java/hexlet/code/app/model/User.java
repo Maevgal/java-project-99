@@ -9,13 +9,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -41,11 +41,11 @@ public class User implements BaseEntity, UserDetails {
 
     private String passwordDigest;
 
-    @CreatedDate
-    private LocalDate createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDate updatedAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public User(long id) {
         this.id = id;

@@ -6,29 +6,18 @@ import hexlet.code.app.dto.UserCeateDTO;
 import hexlet.code.app.mapper.LabelMapper;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.mapper.UserMapper;
-import hexlet.code.app.model.Label;
-import hexlet.code.app.model.Task;
-import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import net.datafaker.Faker;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.IntStream;
-
 @Component
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
-    private final Faker faker;
-
     private final UserRepository userRepository;
 
     private final TaskStatusRepository taskStatusRepository;
@@ -94,32 +83,5 @@ public class DataInitializer implements ApplicationRunner {
         labelCreateDTO.setName("bug");
         var label2 = labelMapper.map(labelCreateDTO);
         labelRepository.save(label2);
-
-        IntStream.range(1, 10).forEach(i -> {
-            Label label = new Label();
-            label.setName(faker.name().title());
-            labelRepository.save(label);
-        });
-        List<Label> listLabels = labelRepository.findAll();
-
-        List<TaskStatus> taskStatuses = taskStatusRepository.findAll();
-        IntStream.range(1, 30).forEach(i -> {
-            var randomStatusIndex = faker.number().numberBetween(1, taskStatuses.size());
-
-            Set<Label> labels = new HashSet<>();
-            var randomLabelIndex1 = faker.number().numberBetween(1, listLabels.size());
-            var randomLabelIndex2 = faker.number().numberBetween(1, listLabels.size());
-            labels.add(listLabels.get(randomLabelIndex1));
-            labels.add(listLabels.get(randomLabelIndex2));
-
-            Task task = new Task();
-            task.setName(faker.book().title());
-            var description = faker.text().text();
-            task.setDescription(description);
-            task.setTaskStatus(taskStatuses.get(randomStatusIndex));
-            task.setLabels(labels);
-            task.setAssignee(user);
-            taskRepository.save(task);
-        });
     }
 }
