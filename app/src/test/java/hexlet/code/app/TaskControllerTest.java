@@ -1,6 +1,8 @@
 package hexlet.code.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.app.dto.TaskDTO;
+import hexlet.code.app.dto.TaskUpdateDTO;
 import hexlet.code.app.mapper.TaskMapper;
 import hexlet.code.app.model.Label;
 import hexlet.code.app.model.Task;
@@ -15,6 +17,7 @@ import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -193,8 +196,9 @@ public class TaskControllerTest {
     public void testUpdate() throws Exception {
         taskRepository.save(testTask);
 
-        var dto = taskMapper.map(testTask);
-
+        TaskUpdateDTO dto = new TaskUpdateDTO();
+        dto.setTitle(JsonNullable.of("new title"));
+        dto.setContent(JsonNullable.of("new content"));
         var request = put("/api/tasks/{id}", testTask.getId()).with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
@@ -206,8 +210,8 @@ public class TaskControllerTest {
                 .orElseThrow(() -> new AssertionError("TaskStatus with id %d not found"
                         .formatted(testTask.getId())));
 
-        assertThat(task.getName()).isEqualTo(dto.getTitle());
-        assertThat(task.getDescription()).isEqualTo(dto.getContent());
+        assertThat(task.getName()).isEqualTo(dto.getTitle().get());
+        assertThat(task.getDescription()).isEqualTo(dto.getContent().get());
     }
 
     @Test
