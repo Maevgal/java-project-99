@@ -11,6 +11,10 @@ plugins {
 group = 'hexlet.code'
 version = '0.0.1-SNAPSHOT'
 
+application {
+    mainClass.set("io.hexlet.app.AppApplication")
+}
+
 java {
     sourceCompatibility = '20'
 }

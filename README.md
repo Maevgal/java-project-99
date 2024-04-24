@@ -7,5 +7,5 @@
 Cистема управления задачами, подобная http://www.redmine.org/. Она позволяет ставить задачи, назначать исполнителей и менять их статусы. Для работы с системой требуется регистрация и аутентификация.
 
 ### Ссылка на проект:
-[Render.com](http://localhost:8080/index.html)
+[Render.com](https://taskmanager-ly06.onrender.com/index.html)
 
