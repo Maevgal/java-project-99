@@ -1,10 +1,9 @@
 package hexlet.code.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -13,8 +12,6 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 }
