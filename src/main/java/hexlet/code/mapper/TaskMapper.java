@@ -46,6 +46,7 @@ public abstract class TaskMapper {
     @Mapping(target = "title", source = "name")
     @Mapping(target = "content", source = "description")
     @Mapping(target = "status", source = "taskStatus.slug")
+    @Mapping(target = "taskLabelIds", source = "labels")
     public abstract TaskDTO map(Task model);
 
     @Mapping(target = "assignee", source = "assigneeId")
@@ -56,7 +57,6 @@ public abstract class TaskMapper {
     public abstract void update(TaskUpdateDTO dto, @MappingTarget Task model);
 
     Set<Long> map(Set<Label> value) {
-
         return value.stream().map(Label::getId).collect(Collectors.toSet());
     }
 
