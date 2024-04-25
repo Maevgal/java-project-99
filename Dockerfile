@@ -4,7 +4,7 @@ WORKDIR /
 
 COPY / .
 
-RUN pwd
+RUN ./gradlew --no-daemon dependencies
 
 RUN ./gradlew --no-daemon build
 
