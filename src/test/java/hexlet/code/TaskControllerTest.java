@@ -183,6 +183,7 @@ public class TaskControllerTest {
     @Test
     public void testCreate() throws Exception {
         testTask.setName("TestPerson");
+
         var dto = taskMapper.map(testTask);
 
         var request = post("/api/tasks").with(user(testUser))
