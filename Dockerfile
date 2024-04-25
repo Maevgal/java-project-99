@@ -1,8 +1,8 @@
 FROM gradle:8-jdk21-alpine
 
-WORKDIR /app
+WORKDIR /
 
-COPY /app .
+COPY / .
 
 RUN pwd
 
