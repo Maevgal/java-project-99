@@ -46,6 +46,4 @@ public class Task {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
-
-
 }
