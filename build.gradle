@@ -12,7 +12,7 @@ group = 'hexlet.code'
 version = '0.0.1-SNAPSHOT'
 
 application {
-    mainClass.set("io.hexlet.AppApplication")
+    mainClass.set("hexlet.code.AppApplication")
 }
 
 java {
